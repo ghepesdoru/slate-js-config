@@ -7,7 +7,7 @@ If you are a long time Linux/Windows user and switched to Mac OS, the window man
 
 The advantage of binding your own keys to java script described actions in a os that does not offer a fast and painless way to win + left / win + right to put windows side to side is great. Being used to fully utilize the real estate of each of my monitors, I took the time to set up a configuration that feats me.
 
-Maybe it will be usefull to others also.
+This script takes quadrant alignement into account, and shold work with any monitor positioning and it's fully customizable. Maybe it will be usefull to others also.
 
 Install
 =======
