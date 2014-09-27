@@ -11,7 +11,7 @@ Maybe it will be usefull to others also.
 
 Install
 =======
-Follow the steps ilustrated at Slate github repository to install Slate. Download this profile and create a new file named .slate.js in your User's home directory. Paste in the contents of the profile, and enjoy.
+Follow the steps illustrated at [Slate] (https://github.com/jigish/slate) github repository to install Slate. Download this profile and create a new file named .slate.js in your User's home directory. Paste in the contents of the profile, and enjoy.
 
 
 Default Bindings
