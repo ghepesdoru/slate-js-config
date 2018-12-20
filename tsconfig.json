@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "strictNullChecks": false,
+    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "dist/",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "rootDir": ".",
+    "sourceMap": true,
+    "target": "es5",
+    "typeRoots": [
+      "./src",
+      "node_modules/@types"
+    ],
+  },
+  "exclude": [
+    "node_modules",
+    "./old",
+    "./build",
+  ]
+}

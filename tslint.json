@@ -1,0 +1,17 @@
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "no-unused-variable": [
+      true
+    ],
+    "no-console": [
+      true,
+      "log",
+      "warn"
+    ],
+    "quotemark": [
+      true,
+      "single"
+    ]
+  }
+}
