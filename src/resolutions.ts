@@ -78,7 +78,7 @@ export const Resolutions: ResolutionsMap = {
   'FHD': { columns: 2, rows: 1, size: { h: 1080, w: 1920 }, type: ResolutionType.FHD },
   'WUXGA': { columns: 2, rows: 1, size: { h: 1200, w: 1920 }, type: ResolutionType.WUXGA },
   'QHD': { columns: 2, rows: 1, size: { h: 1440, w: 2560 }, type: ResolutionType.QHD },
-  'UWQHD': { columns: 3, rows: 1, size: { h: 1440, w: 3440 }, type: ResolutionType.UWQHD },
+  'UWQHD': { columns: 3, rows: 2, size: { h: 1440, w: 3440 }, type: ResolutionType.UWQHD },
   '4K UHD': { columns: 3, rows: 1, size: { h: 2160, w: 3840 }, type: ResolutionType['4K UHD'] },
 };
 /* tslint:enable:object-literal-sort-keys */

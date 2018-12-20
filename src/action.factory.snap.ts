@@ -38,14 +38,6 @@ export function snapFactory(configuration: ISnapConfiguration): Action {
     const mainDimension = axis === 'x' ? 'width' : 'height';
     let isScreenChange = false;
 
-    // S.log('Window location and necesity to change screen',
-    //   wRect,
-    //   {
-    //     cornerOnAxis: corner[axis],
-    //     inclusive: configuration.corner.inclusive,
-    //     inclusiveValue: localCoords[axis] + wRect[mainDimension],
-    //   });
-
     // Test if a screen change is required
     const inclusiveValue = localCoords[axis] + wRect[mainDimension];
     if (
@@ -53,17 +45,8 @@ export function snapFactory(configuration: ISnapConfiguration): Action {
         (inclusiveValue === corner[axis] || corner[axis] - inclusiveValue < corner[axis] / 100 ) ||
       localCoords[axis] === corner[axis]
     ) {
-      // S.log('Should change screen',
-      //   {
-      //     corner: corner[axis],
-      //     inclusive: !!configuration.corner.inclusive,
-      //     inclusiveVal: localCoords[axis] + wRect[mainDimension],
-      //     local: localCoords[axis],
-      //   });
       // The window is already at the limit of the screen, check if there is a neighbour screen on desired direction
       if (screen.neighbours[direction]) {
-        // S.log(`Will change screen from ${screen.ref.id()} to ${screen.neighbours[direction].ref.id()}`,
-        //   `Are references equal?! ${screen.ref === screen.neighbours[direction].ref}`);
         // A screen change can be done, change the screen and resolution
         screen = c.Screens[screen.neighbours[direction].ref.id()];
         resolution = c.Resolutions[screen.resolution];
@@ -74,13 +57,12 @@ export function snapFactory(configuration: ISnapConfiguration): Action {
         position.y = initialPossition.y;
 
         isScreenChange = true;
-        // S.log('The new origin to start from will be', initialPossition);
       }
     }
 
     // Determine the final window dimensions
     const fitted = fitWindowToScreen(wRect, screen, resolution, axis, isScreenChange);
-    // S.log(fitted, screen.visibleSize, screen.visibleSize, resolution);
+
     const isFitOnlyCase = fitted.isFitOnlyCase;
     const height = fitted.height;
     const width = fitted.width;
@@ -91,18 +73,10 @@ export function snapFactory(configuration: ISnapConfiguration): Action {
 
     if (!isFitOnlyCase || isScreenChange) {
       if (axis === 'x') {
-        const columnSize = Math.floor(screen.visibleSize.width / resolution.columns);
+        const columnSize = screen.visibleSize.width / resolution.columns;
         const localPositionX = position.x - screen.position.x;
 
-        x = operate(Math.floor(localPositionX / columnSize) * columnSize, width, operation) + screen.position.x;
-        S.log('About to determine X possition: ', {
-          columnRation: position.x / columnSize,
-          columnSize,
-          operation,
-          positionX: position.x,
-          result: Math.floor(position.x / columnSize) * columnSize,
-          width,
-        });
+        x = operate(localPositionX / columnSize * columnSize, width, operation) + screen.position.x;
 
         // Normalize x to fit the screen (don't allow out of bounds window placements)
         x = x < screen.position.xv ? // The window is underflowing the horizontal axis?
@@ -111,17 +85,23 @@ export function snapFactory(configuration: ISnapConfiguration): Action {
           x + width > (screen.position.xv + screen.visibleSize.width) ?
             (screen.position.xv + screen.visibleSize.width) - width : // Fit the window to the horizontal axis (max)
             x; // Keep x as is
+
+        // Snap to a full column
+        x = Math.round(x / columnSize * columnSize);
       } else {
-        const rowSize = Math.floor(screen.visibleSize.height / resolution.rows);
-        y = operate(Math.floor(position.y / rowSize) * rowSize, height, operation);
+        const rowSize = screen.size.height / resolution.rows;
+        y = operate(position.y / rowSize * rowSize, height, operation);
 
         // Normalize y to fit the screen (don't allow out of bounds window placements)
-        y = y < screen.position.yv ? // The window is underflowing the vertical axis?
-          screen.position.yv : // Fit to the minimum vertical position (absolute 0)
+        y = y < screen.position.y ? // The window is underflowing the vertical axis?
+          screen.position.y : // Fit to the minimum vertical position (absolute 0)
           // The window is overflowing the vertical axis?
-          y + height > (screen.position.yv + screen.visibleSize.height) ?
-            (screen.position.yv + screen.visibleSize.height) - height : // Fit the window to the horizontal axis (max)
+          y + height > (screen.position.y + screen.size.height) ?
+            (screen.position.y + screen.size.height) - height : // Fit the window to the horizontal axis (max)
             y; // Keep y as is
+
+        // Snap to a full row
+        y = Math.round(y / rowSize * rowSize);
       }
     }
 
@@ -143,8 +123,8 @@ function fitWindowToScreen(
   wRect: Slate.RectArea, screen: IScreenDetails,
   resolution: IResolutin, axis: ISnapConfiguration['axis'],
   isScreenChange: boolean) {
-  const columnSize = Math.floor(screen.visibleSize.width / resolution.columns);
-  const rowSize = Math.floor(screen.visibleSize.height / resolution.rows);
+  const columnSize = Math.round(screen.visibleSize.width / resolution.columns);
+  const rowSize = Math.round(screen.visibleSize.height / resolution.rows);
   let isFitOnlyCase = false;
 
   let height = wRect.height;
@@ -163,7 +143,7 @@ function fitWindowToScreen(
       height = screen.visibleSize.height;
     } else {
       // Normalize the window to the next full row unit
-      height = Math.floor(wRect.height / rowSize) * rowSize;
+      height = Math.round(wRect.height / rowSize) * rowSize;
     }
   }
 
@@ -179,11 +159,8 @@ function fitWindowToScreen(
       // Normalize the window to the full visible width
       width = screen.visibleSize.width;
     } else {
-      const columns = wRect.width / columnSize;
-
       // Normalize the window to the next full column unit
-      width = Math.floor(wRect.width / columnSize) * columnSize;
-      slate.log('Determined number of columns: ', columns, 'Final width: ', width);
+      width = Math.round(wRect.width / columnSize) * columnSize;
     }
   }
 
