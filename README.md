@@ -12,6 +12,16 @@ Install
 =======
 Follow the steps illustrated at [Slate](https://github.com/jigish/slate) github  repository to install Slate. Download this profile and create a new file named .slate.js in your User's home directory. Paste in the contents of the profile, and enjoy.
 
+Usage
+=====
+If you want to test my configuration, you can do so by copying the dist/slate.js file directly to your home directory and restarting Slate.
+
+Customisation/Extension
+=======================
+If you want to modify the bindings, add new resolutions etc, fell free to do so by clonsing the repository followed by a **npm install** and **npm build**. For fast testing **npm build-test** is also available and will copy the resulting slate.js configuration to your home directory.
+
+Fell free to create a pull request with your modifications and we can arange a merge for everyone else to benefit of your changes.
+
 
 Default Bindings
 ================
